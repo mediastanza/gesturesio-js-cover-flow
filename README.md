@@ -1,4 +1,4 @@
-# JS Cover Flow - Enhanced by Gestures.IO
+# JS Cover Flow - Touchless w/ Gestures.IO
 We remixed JS Cover Flow by @luwes to add gesture-based interaction to it (basic swipes from left or right hand).
 
 Compatible with Kinect, RealSense, OpenNI, and the list is growing...
