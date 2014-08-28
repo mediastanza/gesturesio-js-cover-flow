@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -6,8 +6,10 @@
 	<link rel="stylesheet" href="coverflow.css"/>
 </head>
 <body>
+	<div id="enhancedby"><a href="https://gestures.io/"></a></div>
 	<div id="container"></div>
-	<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>-->
+	<script src="//cdn.gestures.io/js/gesturesio.js"></script> <!-- Just add the Gestures.IO library -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="coverflow.js"></script>
 	<script>
 		function reset() {
@@ -22,7 +24,7 @@
 				// mode: 'flash',
 				// backgroundcolor: '009900',
 				// backgroundopacity: 0,
-				// wmode: 'transparent',
+				wmode: 'transparent',
 				// gradientcolor: 'ff0000',
 				// showduration: true,
 				playlist: 'playlist.json',
@@ -57,6 +59,42 @@
 				textoffset: 50
 			})
 			.on('ready', function() {
+
+				//////////////////////////////////////
+				// And the magic of Gestures.IO begins
+
+				var GIO = G.IO();
+				GIO.init($('#container').width(), $('#container').height());
+				GIO.connect();
+
+				function onStatus(statusId, userId) {
+					switch (statusId) {
+						case 1:
+							GIO.addGesture('swipe', 'left_hand', 'x', 1, userId);
+							GIO.addGesture('swipe', 'left_hand', 'x', -1, userId);
+							GIO.addGesture('swipe', 'right_hand', 'x', 1, userId);
+							GIO.addGesture('swipe', 'right_hand', 'x', -1, userId);
+							break;
+						case 0:
+							break;
+					}
+				}
+				GIO.signalsManager.statusChanged.add(onStatus);
+
+				function onGesture(command, data) {
+					switch (parseInt(data.whichDirection)) {
+						case 1:
+							coverflow().prev();
+							break;
+						case -1:
+							coverflow().next();
+							break;
+					}
+				}
+				GIO.signalsManager.gestureDetected.add(onGesture);
+
+				// Gestures.IO-related code stops there
+				///////////////////////////////////////
 
 				this.on('focus', function(index) {
 					document.getElementById('focusindex').innerHTML = index;
